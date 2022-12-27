@@ -86,45 +86,94 @@ var threeSum = function (nums) {
   // 解法二 end
 
   // // 解法三 start
+  // nums.sort((a, b) => a - b);
+  // if (nums[0] > 0 || nums[nums.length - 1] < 0 || nums.length < 3) return [];
+  // if (!nums[0] && !nums[1] && !nums[2]) return [[0, 0, 0]];
+
+  // let ans = [], i = 0, ii = i;
+  // while(i < nums.length - 2 && nums[i] <= 0) {
+  //   let k = nums.length - 1, kk = k;
+  //   while(i < k - 1) {
+  //     let j = i + 1;
+
+  //     while(k > j && nums[i] + nums[j] + nums[k] > 0) {
+  //       k--;
+  //     }
+  //     while(k > j && nums[i] + nums[j] + nums[k] < 0) {
+  //       j++;
+  //     }
+
+  //     if(k > j && nums[i] + nums[j] + nums[k] === 0) {
+  //       ans.push([nums[i], nums[j], nums[k]]);
+  //       j++;
+  //       ii = i;
+  //       kk = k;
+  //       k--;
+  //       while(nums[kk] === nums[k]) k--;
+  //     }
+
+  //     if(k > j && nums[i] + nums[j] + nums[k] > 0) {
+  //       k--;
+  //       continue;
+  //     }
+
+  //     if(k <= j) {
+  //       break;
+  //     }
+  //   }
+
+  //   i++;
+  //   while(nums[ii] === nums[i]) i++;
+  // }
+  // return ans;
+  // 解法三 end
+
+  // 解法四 start
+  let len = nums.length;
+  if(len < 3) return [];
   nums.sort((a, b) => a - b);
-  if (nums[0] > 0 || nums[nums.length - 1] < 0 || nums.length < 3) return [];
-  if (!nums[0] && !nums[1] && !nums[2]) return [[0, 0, 0]];
+  if (nums[0] > 0 || nums[len - 1] < 0) return [];
+  // if (!nums[0] && !nums[1] && !nums[2]) return [[0, 0, 0]];
   let ans = [],
-    ii,
-    kk,
-    jj;
+    i = 0;
 
-  for (let i = 0; i < nums.length - 2 && nums[i] <= 0; i++) {
-    if (nums[ii] === nums[i]) continue;
+  while (nums[i] <= 0 && i < len - 2) {
+    if (i > 0 && nums[i] === nums[i - 1]) {
+      i++;
+      continue;
+    }
     let j = i + 1,
-      k = nums.length - 1;
-
-    if (nums[i] + nums[j] + nums[k] === 0) {
-      ans.push([nums[i], nums[j], nums[k]]);
-      ii = i;
-      jj = j;
-      kk = k;
-    }
-
-    while (nums[i] + nums[j] + nums[k] > 0 && nums[k] >= 0 && k > j) {
-      k--;
-      if (k > j && nums[i] + nums[j] + nums[k] === 0) {
+      k = len - 1,
+      sum = 0;
+    while (k > j) {
+      sum = nums[i] + nums[j] + nums[k];
+      if (sum === 0) {
         ans.push([nums[i], nums[j], nums[k]]);
-        kk = k;
-        ii = i;
+        k--;
+        while (nums[k] === nums[k + 1]) k--;
+        j++;
+        while (nums[j] === nums[j - 1]) j++;
+      } else if (sum > 0) {
+        k--;
+      } else {
+        j++;
       }
+      // while (nums[i] + nums[j] + nums[k] > 0) {
+      //   k--;
+      //   while (nums[k] === nums[k + 1]) k--;
+      // }
+      // while (nums[i] + nums[j] + nums[k] < 0) {
+      //   j++;
+      //   while (nums[j] === nums[j - 1]) j++;
+      // }
     }
 
-    while (nums[i] + nums[j] + nums[k] < 0 && nums[j] <= 0 && k > j) {
-      j++;
-      if (k > j && nums[i] + nums[j] + nums[k] === 0) {
-        ans.push([nums[i], nums[j], nums[k]]);
-        jj = j;
-        ii = i;
-      }
-    }
+    i++;
   }
+
   return ans;
+
+  // 解法四 end
 };
 // @lc code=end
 
