@@ -42,6 +42,19 @@ var permute = function (nums) {
 
   // return ans;
 
+  return nums.reduce(
+    (ans, num, i) => {
+      const buffer = [];
+      for (let arr of ans) {
+        for (let j = i + 1; j < nums.length; j++) {
+          buffer.push(swap(i, j, arr));
+        }
+      }
+      return ans.concat(buffer);
+    },
+    [nums]
+  );
+
   // **************************************************
 
   // const ans = [nums];
@@ -60,27 +73,28 @@ var permute = function (nums) {
 
   // **************************************************
 
-  let ans = [];
-  const dfs = (buffer, used) => {
-    if(buffer.length === nums.length) return ans.push(buffer.slice());
-    
-    for(let i = 0; i < nums.length; i++) {
-      if(used[i]) continue;
+  // 搜索回溯
+  // let ans = [];
+  // const dfs = (buffer, used) => {
+  //   if(buffer.length === nums.length) return ans.push(buffer.slice());
 
-      // 吃
-      buffer.push(nums[i]);
-      used[i] = true;
+  //   for(let i = 0; i < nums.length; i++) {
+  //     if(used[i]) continue;
 
-      dfs(buffer, used);
-      
-      // 吐
-      used[i] = false;
-      buffer.pop();
-    }
-  }
+  //     // 吃
+  //     buffer.push(nums[i]);
+  //     used[i] = true;
 
-  dfs([], Array(nums.length).fill(false));
-  return ans;
+  //     dfs(buffer, used);
+
+  //     // 吐
+  //     used[i] = false;
+  //     buffer.pop();
+  //   }
+  // }
+
+  // dfs([], Array(nums.length).fill(false));
+  // return ans;
 };
 // @lc code=end
 
