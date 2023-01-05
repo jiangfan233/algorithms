@@ -41,58 +41,63 @@ var permuteUnique = function (nums) {
   // return ans;
 
   // 修改了原数组 nums
-  // const search = (buffer, used, idx) => {
-  //   if (idx === nums.length) return ans.push(buffer.slice());
+  const search = (buffer, used, idx) => {
+    if (idx === nums.length) return ans.push(buffer.slice());
 
-  //   for (let i = 0; i < nums.length; i++) {
-  //     if (used[i] || (i > 0 && nums[i] === nums[i - 1] && !used[i - 1]))
-  //       continue;
-  //     buffer.push(nums[i]);
-  //     used[i] = true;
-  //     // console.log("吃", i, buffer, used);
+    for (let i = 0; i < nums.length; i++) {
+      /** [1, 1, 2]
+       * i > 0 && nums[i] === nums[i - 1] && !used[i - 1]
+       * 当前元素和前面元素相同，并且前面元素没有用过，那么不用当前元素 --> 
+       *    只用第一个重复元素，后面的都不用
+       */
+      if (used[i] || (i > 0 && nums[i] === nums[i - 1] && !used[i - 1]))
+        continue;
+      buffer.push(nums[i]);
+      used[i] = true;
+      // console.log("吃", i, buffer, used);
 
-  //     search(buffer, used, idx + 1);
+      search(buffer, used, idx + 1);
 
-  //     buffer.pop();
-  //     used[i] = false;
-  //     // console.log("吐", i, buffer, used);
-  //   }
-  // };
-
-  // nums.sort((a, b) => a - b);
-  // let ans = [];
-  // search([], Array(nums.length).fill(false), 0);
-
-  // return ans;
-
-  // 未修改原数组
-  const map = new Map(),
-    ans = [],
-    set = [];
-  for (let num of nums) {
-    if (map.has(num)) {
-      map.set(num, map.get(num) + 1);
-    } else {
-      map.set(num, 1);
-      set.push(num);
-    }
-  }
-
-  const search = (buffer) => {
-    for (let i = 0; i < set.length; i++) {
-      if (buffer.length === nums.length) return ans.push(buffer.slice());
-
-      if (map.get(set[i]) <= 0) continue;
-
-      buffer.push(set[i]);
-      map.set(set[i], map.get(set[i]) - 1);
-      search(buffer);
       buffer.pop();
-      map.set(set[i], map.get(set[i]) + 1);
+      used[i] = false;
+      // console.log("吐", i, buffer, used);
     }
   };
-  search([]);
+
+  nums.sort((a, b) => a - b);
+  let ans = [];
+  search([], Array(nums.length).fill(false), 0);
+
   return ans;
+
+  // 未修改原数组
+  // const map = new Map(),
+  //   ans = [],
+  //   set = [];
+  // for (let num of nums) {
+  //   if (map.has(num)) {
+  //     map.set(num, map.get(num) + 1);
+  //   } else {
+  //     map.set(num, 1);
+  //     set.push(num);
+  //   }
+  // }
+
+  // const search = (buffer) => {
+  //   for (let i = 0; i < set.length; i++) {
+  //     if (buffer.length === nums.length) return ans.push(buffer.slice());
+
+  //     if (map.get(set[i]) <= 0) continue;
+
+  //     buffer.push(set[i]);
+  //     map.set(set[i], map.get(set[i]) - 1);
+  //     search(buffer);
+  //     buffer.pop();
+  //     map.set(set[i], map.get(set[i]) + 1);
+  //   }
+  // };
+  // search([]);
+  // return ans;
 };
 // @lc code=end
 

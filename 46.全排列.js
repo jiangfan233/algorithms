@@ -42,18 +42,18 @@ var permute = function (nums) {
 
   // return ans;
 
-  return nums.reduce(
-    (ans, num, i) => {
-      const buffer = [];
-      for (let arr of ans) {
-        for (let j = i + 1; j < nums.length; j++) {
-          buffer.push(swap(i, j, arr));
-        }
-      }
-      return ans.concat(buffer);
-    },
-    [nums]
-  );
+  // return nums.reduce(
+  //   (ans, num, i) => {
+  //     const buffer = [];
+  //     for (let arr of ans) {
+  //       for (let j = i + 1; j < nums.length; j++) {
+  //         buffer.push(swap(i, j, arr));
+  //       }
+  //     }
+  //     return ans.concat(buffer);
+  //   },
+  //   [nums]
+  // );
 
   // **************************************************
 
@@ -95,6 +95,26 @@ var permute = function (nums) {
 
   // dfs([], Array(nums.length).fill(false));
   // return ans;
+
+  function dfs(buffer, used) {
+    if (buffer.length === nums.length) return ans.push(buffer.slice());
+
+    for (let i = 0; i < nums.length; i++) {
+      if (!used[i]) {
+        // 对于每一个未使用的 nums[i],
+        // 用过之后不保证有正确答案
+        used[i] = true;
+        buffer.push(nums[i]);
+        dfs(buffer, used);
+        buffer.pop();
+        used[i] = false;
+      }
+    }
+  }
+
+  let ans = [];
+  dfs([], Array(nums.length).fill(false));
+  return ans;
 };
 // @lc code=end
 

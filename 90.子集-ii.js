@@ -26,20 +26,65 @@ var subsetsWithDup = function (nums) {
   // search([], 0);
   // return ans;
 
-  let ans = [];
-  const search = (buffer, arr) => {
-    // console.log(buffer, arr)
+  // let ans = [];
+  // const search = (buffer, arr) => {
+  //   // console.log(buffer, arr)
+  //   ans.push(buffer.slice());
+  //   for (let i = 0; i < arr.length; i++) {
+  //     if (i === 0 || arr[i] !== arr[i - 1]) {
+  //       buffer.push(arr[i]);
+  //       search(buffer, arr.slice(i + 1));
+  //       buffer.pop();
+  //     }
+  //   }
+  // };
+  // nums.sort((a,b)=>{return a-b});
+  // search([], nums);
+  // return ans;
+
+  // function search(buffer, idx) {
+  //   ans.push(buffer.slice());
+
+  //   for (let i = idx; i < nums.length; i++) {
+  //     if (i !== idx && nums[i] === nums[i - 1]) continue;
+  //     buffer.push(nums[i]);
+  //     search(buffer, i + 1);
+  //     buffer.pop();
+  //   }
+  // }
+
+  // let ans = [];
+  // nums.sort((a, b) => a - b);
+  // search([], 0);
+  // return ans;
+
+  let map = {},
+    set = [];
+  for (let num of nums) {
+    if (map[num]) {
+      map[num] += 1;
+    } else {
+      map[num] = 1;
+      set.push(num);
+    }
+  }
+
+  function search(buffer, idx) {
     ans.push(buffer.slice());
-    for (let i = 0; i < arr.length; i++) {
-      if (i === 0 || arr[i] !== arr[i - 1]) {
-        buffer.push(arr[i]);
-        search(buffer, arr.slice(i + 1));
+    for (let i = idx; i < set.length; i++) {
+      const num = set[i];
+      if (map[num] > 0) {
+        buffer.push(num);
+        map[num] -= 1;
+        search(buffer, i);
         buffer.pop();
+        map[num] += 1;
       }
     }
-  };
-  nums.sort((a,b)=>{return a-b});
-  search([], nums);
+  }
+
+  let ans = [];
+  search([], 0);
   return ans;
 };
 // @lc code=end
