@@ -41,22 +41,33 @@ var flatten = function (root) {
   /**
    * 卡在简化逻辑
    */
-  if (!root) return root;
-  let node = root;
-  if (node.left) {
-    let right = node.right;
-    node.right = node.left;
+  // if (!root) return root;
+  // let node = root;
+  // if (node.left) {
+  //   let right = node.right;
+  //   node.right = node.left;
+  //   node.left = null;
+  //   let end = flatten(node.right);
+  //   if (right) {
+  //     end.right = right;
+  //     return flatten(end.right);
+  //   } else {
+  //     return end;
+  //   }
+  // } else if (node.right) {
+  //   return flatten(node.right);
+  // }
+  // return root;
+
+  let head = null;
+  const go = (node) => {
+    if (node.right) go(node.right);
+    if (node.left) go(node.left);
     node.left = null;
-    let end = flatten(node.right);
-    if (right) {
-      end.right = right;
-      return flatten(end.right);
-    } else {
-      return end;
-    }
-  } else if (node.right) {
-    return flatten(node.right);
-  }
+    node.right = head;
+    head = node;
+  };
+  if(root) go(root);
   return root;
 };
 // @lc code=end
