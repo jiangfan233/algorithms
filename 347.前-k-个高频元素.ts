@@ -21,14 +21,16 @@ function topKFrequent(nums: number[], k: number): number[] {
   // }
   // return ans;
 
-  const map = new Map<number, number>();
-  for (let num of nums) {
-    if (map.get(num)) {
-      map.set(num, map.get(num)! + 1);
-    } else {
-      map.set(num, 1);
-    }
-  }
+  // ********************************************
+  // 性能最慢
+  // const map = new Map<number, number>();
+  // for (let num of nums) {
+  //   if (map.get(num)) {
+  //     map.set(num, map.get(num)! + 1);
+  //   } else {
+  //     map.set(num, 1);
+  //   }
+  // }
   // let ans: number[] = [];
   // for(let [key, freq] of map) {
   //   if(!ans.length) {
@@ -51,18 +53,32 @@ function topKFrequent(nums: number[], k: number): number[] {
   // }
   // return ans.slice(0, k);
 
-  let ans: number[][] = []
-  for(let [key, freq] of map) {
-    if(ans[freq] === undefined) {
+  // ******************************************************
+  // 桶算法，性能最佳
+  const map = new Map<number, number>();
+  for (let num of nums) {
+    if (map.get(num)) {
+      map.set(num, map.get(num)! + 1);
+    } else {
+      map.set(num, 1);
+    }
+  }
+
+  // 将频率作为数组下标
+  let ans: number[][] = [];
+  for (let [key, freq] of map) {
+    if (ans[freq] === undefined) {
       ans[freq] = [key];
     } else {
       ans[freq].push(key);
     }
   }
-  return ans.filter((item) => item !== undefined).flat().reverse().slice(0, k);
-
+  return ans
+    .filter((item) => item !== undefined)
+    .flat()
+    .reverse()
+    .slice(0, k);
 }
 // @lc code=end
 
-
-console.log(topKFrequent([1,1,1,2,2,3], 2))
+console.log(topKFrequent([1, 1, 1, 2, 2, 3], 2));
