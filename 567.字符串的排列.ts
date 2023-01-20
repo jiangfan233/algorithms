@@ -54,38 +54,91 @@ function checkInclusion(s1: string, s2: string): boolean {
   // }
   // return false;
 
+  // high top
+  // const map = new Map<string, number>();
+  // // s1每个元素高度变高
+  // for(let i = 0; i < s1.length; i++) {
+  //   const c = s1[i];
+  //   if(map.has(c)) {
+  //     map.set(c, map.get(c)! + 1);
+  //   } else {
+  //     map.set(c, 1);
+  //   }
+  // }
 
-  const map = new Map<string, number>();
-  // s1每个元素高度变高
-  for(let i = 0; i < s1.length; i++) {
-    const c = s1[i];
-    if(map.has(c)) {
-      map.set(c, map.get(c)! + 1);
-    } else {
-      map.set(c, 1);
-    }
+  // for(let i = 0; i < s2.length; i++) {
+  //   // 排列不改变长度 -> 窗口长度始终不变
+  //   // 先把当前元素高度变低
+  //   const c = s2[i];
+  //   if(map.has(c)) {
+  //     map.set(c, map.get(c)! - 1);
+  //   } else {
+  //     map.set(c, -1);
+  //   }
+  //   // 把窗口之前的元素高度变高（变回来）
+  //   // 若窗口是s1的排列，
+  //   // 此时窗口以及窗口之前的元素的高度都是0
+  //   if(i >= s1.length) {
+  //     const past = s2[i - s1.length];
+  //     map.set(past, map.get(past)! + 1);
+  //   }
+  //   if (Array.from(map.values()).every(n => n === 0)) return true;
+  // }
+  // return false;
+
+  /**
+   * 移动窗口：
+   * 1、需要知道s1的排列不改变长度
+   * 2、需要记录s1中每个字母出现的次数，
+   *    需要遍历s2中每一个可能是s1排列的子串（子串开头字母在s1中），
+   *    如果这个字串不是s1的排列，需要恢复map
+   */
+  const map: { [key: string]: number } = {};
+  for (let c of s1) {
+    if (map[c] === undefined) map[c] = 0;
+    map[c]++;
   }
+  let l = -1;
+  let r = 0;
+  while (r < s2.length) {
+    const c = s2[r];
+    if (map[c] > 0) {
+      map[c]--;
+      // 初始化窗口
+      if (l < 0) l = r;
+      if (r - l + 1 === s1.length) return true;
+    }
+    // else if (map[c] === 0) {
+    //   // map[c] === 0说明c前面的c把次数耗尽了，但c前面的字母仍然在s1中
+    //   // 需要从窗口左侧逐一恢复字母个数，再将窗口左边界右移一位（l++）
+    //   map[s2[l]]++;
+    //   l++;
+    //   continue;
+    // } else if (l >= 0) {
+    //   // 如果s1中不存在c，并且窗口已经初始化（l>=0）,
+    //   // 需要从窗口左边界开始逐一恢复字母个数
+    //   // 这一步和上面一步没有本质区别，可优化
+    //   map[s2[l]]++;
+    //   l++;
+    //   if (l === r) {
+    //     l = -1;
+    //   } else {
+    //     continue;
+    //   }
+    // }
 
-  for(let i = 0; i < s2.length; i++) {
-    // 排列不改变长度 -> 窗口长度始终不变
-    // 先把当前元素高度变低
-    const c = s2[i];
-    if(map.has(c)) {
-      map.set(c, map.get(c)! - 1); 
-    } else {
-      map.set(c, -1);
+    // map[c] === 0 || map[c] === undefined && l >= 0 && l < r
+    else if (l >= 0 && l < r) {
+      map[s2[l]]++;
+      l++;
+      // 这里l++ 后才判断l是否等于r，没有把s2[r]字母对应的个数加一
+      if (l === r) l = -1;
+      continue;
     }
-    // 把窗口之前的元素高度变高（变回来）
-    // 若窗口是s1的排列，
-    // 此时窗口以及窗口之前的元素的高度都是0
-    if(i >= s1.length) {
-      const past = s2[i - s1.length];
-      map.set(past, map.get(past)! + 1);
-    }
-    if (Array.from(map.values()).every(n => n === 0)) return true;
+    r++;
   }
   return false;
 }
 // @lc code=end
 
-console.log(checkInclusion("ab", "eidbaooo"))
+console.log(checkInclusion("ab", "aab"));
