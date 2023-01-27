@@ -18,7 +18,7 @@
  *     }
  * }
  */
-
+// 后序遍历： 左右根
 function postorderTraversal(root: TreeNode | null): number[] {
   // const go = (node: TreeNode | null) => {
   //   if (!node) return;
@@ -34,15 +34,31 @@ function postorderTraversal(root: TreeNode | null): number[] {
   // go(root);
   // return ans;
 
-  let arr :(TreeNode | null)[] = [root];
+  // let arr :(TreeNode | null)[] = [root];
+  // let ans :number[] = [];
+  // while(arr.length) {
+  //   let curr = arr.pop();
+  //   if(!curr) continue;
+  //   arr.push(curr.left);
+  //   arr.push(curr.right);
+  //   ans.push(curr.val);
+  // }
+  // return ans.reverse();
+
+  /**  */
+  // if(!root) return [];
+  // return postorderTraversal(root.left).concat(postorderTraversal(root.right), root.val);
+
   let ans :number[] = [];
+  let arr :TreeNode[] = [root!];
   while(arr.length) {
-    let curr = arr.pop();
-    if(!curr) continue;
-    arr.push(curr.left);
-    arr.push(curr.right);
-    ans.push(curr.val);
+    const node = arr.pop()!;
+    if(!node) continue;
+    ans.push(node.val);
+    arr.push(node.left!);
+    arr.push(node.right!);
   }
+
   return ans.reverse();
 };
 // @lc code=end

@@ -19,15 +19,32 @@
  * }
  */
 
+// 前序遍历： 根左右
 function preorderTraversal(root: TreeNode | null): number[] {
-  let arr: (TreeNode | null)[] = [root];
-  let ans: number[] = [];
-  while (arr.length) {
-    const node = arr.pop()!;
-    if (!node) continue;
+  // let arr: (TreeNode | null)[] = [root];
+  // let ans: number[] = [];
+  // while (arr.length) {
+  //   const node = arr.pop()!;
+  //   if (!node) continue;
+  //   ans.push(node.val);
+  //   arr.push(node.right);
+  //   arr.push(node.left);
+  // }
+  // return ans;
+
+
+  // if(!root) return [];
+  // return [root.val].concat(preorderTraversal(root.left), preorderTraversal(root.right));
+
+
+  let ans :number[] = [];
+  let arr :TreeNode[] = [root!];
+  while(arr.length) {
+    const node = arr.pop()!
+    if(!node) continue;
     ans.push(node.val);
-    arr.push(node.right);
-    arr.push(node.left);
+    arr.push(node.right!);
+    arr.push(node.left!);
   }
   return ans;
 };

@@ -30,6 +30,7 @@ class TreeNode {
  * }
  */
 
+// 中序遍历： 左根右
 function inorderTraversal(root: TreeNode | null): number[] {
   // let curr = root;
   // let arr: TreeNode[] = [];
@@ -47,17 +48,35 @@ function inorderTraversal(root: TreeNode | null): number[] {
   // return ans;
 
 
+  // let curr = root;
+  // let arr: TreeNode[] = [];
+  // let ans: number[] = [];
+  // while (curr || arr.length) {
+  //   if (!curr) {
+  //     curr = arr.pop()!;
+  //     ans.push(curr.val);
+  //     curr = curr.right;
+  //   } else {
+  //     arr.push(curr);
+  //     curr = curr.left;
+  //   }
+  // }
+  // return ans;
+
+  // if(!root) return [];
+  // return inorderTraversal(root.left).concat(root.val, inorderTraversal(root.right));
+
+  let ans: number[] = [];
   let curr = root;
   let arr: TreeNode[] = [];
-  let ans: number[] = [];
   while (curr || arr.length) {
-    if (!curr) {
+    if (curr) {
+      arr.push(curr!);
+      curr = curr.left;
+    } else {
       curr = arr.pop()!;
       ans.push(curr.val);
       curr = curr.right;
-    } else {
-      arr.push(curr);
-      curr = curr.left;
     }
   }
   return ans;
