@@ -12,6 +12,9 @@ function findDuplicate(nums: number[]): number {
     slow = nums[slow];
   }
 
+
+  // l + p = (l + nR + x + 2p) / 2
+  // l = nR + x
   fast = nums[0];
   while(fast !== slow) {
     fast = nums[fast];
