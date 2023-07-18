@@ -6,32 +6,30 @@
 
 // @lc code=start
 function minDistance(word1: string, word2: string): number {
-  let l1 = word1.length + 1;
-  let l2 = word2.length + 1;
-
-  // rows
-  let dp = Array(l1)
+  let dp = Array(word1.length + 1)
     .fill(0)
-    // cols
-    .map((_) => Array(l2).fill(0));
+    .map((_, y) =>
+      Array(word2.length + 1)
+        .fill(0)
+    );
 
-  for (let r = 1; r < l1; r++) {
-    dp[r][0] = r;
+  for(let i = 0; i <= word1.length; i++) {
+    dp[i][0] = i;
   }
-  for (let c = 1; c < l2; c++) {
-    dp[0][c] = c;
+  for(let i = 0; i <= word2.length; i++) {
+    dp[0][i] = i;
   }
 
-  for (let r = 1; r < l1; r++) {
-    for (let c = 1; c < l2; c++) {
-      if (word1[r - 1] === word2[c - 1]) {
-        dp[r][c] = dp[r - 1][c - 1];
+  for(let y = 1; y <= word1.length; y++) {
+    for(let x = 1; x <= word2.length; x++) {
+      if(word1[y-1] === word2[x-1]) {
+        dp[y][x] = dp[y-1][x-1];
       } else {
-        dp[r][c] = Math.min(dp[r - 1][c], dp[r][c - 1], dp[r - 1][c - 1]) + 1;
+        dp[y][x] = Math.min(dp[y][x-1], dp[y-1][x], dp[y-1][x-1]) + 1;
       }
     }
+    // console.log(dp)
   }
-
   return dp[word1.length][word2.length];
 }
 // @lc code=end
